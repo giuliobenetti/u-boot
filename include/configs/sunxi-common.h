@@ -38,7 +38,12 @@
 /* Serial & console */
 #define CONFIG_SYS_NS16550_SERIAL
 /* ns16550 reg in the low bits of cpu reg */
+#ifndef CONFIG_MACH_SUNIV
 #define CONFIG_SYS_NS16550_CLK		24000000
+#else
+/* suniv doesn't have apb2 and uart is connected to apb1 */
+#define CONFIG_SYS_NS16550_CLK		100000000
+#endif
 #ifndef CONFIG_DM_SERIAL
 # define CONFIG_SYS_NS16550_REG_SIZE	-4
 # define CONFIG_SYS_NS16550_COM1		SUNXI_UART0_BASE
@@ -67,6 +72,15 @@
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x2fe00000
 #define CONFIG_SPL_BSS_START_ADDR	0x2ff80000
+#elif defined(CONFIG_MACH_SUNIV)
+#define SDRAM_OFFSET(x) 0x8##x
+#define CONFIG_SYS_SDRAM_BASE		0x80000000
+#define CONFIG_SYS_LOAD_ADDR		0x81000000 /* default load address */
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+ * since it needs to fit in with the other values. By also #defining it
+ * we get warnings if the Kconfig value mismatches. */
+#define CONFIG_SPL_STACK_R_ADDR		0x81e00000
+#define CONFIG_SPL_BSS_START_ADDR	0x81f80000
 #else
 #define SDRAM_OFFSET(x) 0x4##x
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
@@ -142,12 +156,15 @@
 #define CONFIG_SYS_MMC_MAX_DEVICE	4
 #endif
 
-#ifndef CONFIG_MACH_SUN8I_V3S
-/* 64MB of malloc() pool */
-#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (64 << 20))
-#else
+#if defined(CONFIG_MACH_SUN8I_V3S)
 /* 2MB of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (2 << 20))
+#elif defined(CONFIG_MACH_SUNIV)
+/* 1MB of malloc() pool */
+#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (1 << 20))
+#else
+/* 64MB of malloc() pool */
+#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (64 << 20))
 #endif
 
 /*
@@ -295,19 +312,7 @@ extern int soft_i2c_gpio_scl;
 #define RAMDISK_ADDR_R	__stringify(SDRAM_OFFSET(FE00000))
 
 #else
-/*
- * 160M RAM (256M minimum minus 64MB heap + 32MB for u-boot, stack, fb, etc.
- * 32M uncompressed kernel, 16M compressed kernel, 1M fdt,
- * 1M script, 1M pxe and the ramdisk at the end.
- */
-#ifndef CONFIG_MACH_SUN8I_V3S
-#define BOOTM_SIZE     __stringify(0xa000000)
-#define KERNEL_ADDR_R  __stringify(SDRAM_OFFSET(2000000))
-#define FDT_ADDR_R     __stringify(SDRAM_OFFSET(3000000))
-#define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(3100000))
-#define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(3200000))
-#define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(3300000))
-#else
+#if defined(CONFIG_MACH_SUN8I_V3S)
 /*
  * 64M RAM minus 2MB heap + 16MB for u-boot, stack, fb, etc.
  * 16M uncompressed kernel, 8M compressed kernel, 1M fdt,
@@ -319,6 +324,30 @@ extern int soft_i2c_gpio_scl;
 #define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(1900000))
 #define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(1A00000))
 #define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(1B00000))
+#elif defined(CONFIG_MACH_SUNIV)
+/*
+ * 32M RAM minus 1MB heap + 8MB for u-boot, stack, fb, etc.
+ * 8M uncompressed kernel, 4M compressed kernel, 512K fdt,
+ * 512K script, 512K pxe and the ramdisk at the end.
+ */
+#define BOOTM_SIZE     __stringify(0x1700000)
+#define KERNEL_ADDR_R  __stringify(SDRAM_OFFSET(0500000))
+#define FDT_ADDR_R     __stringify(SDRAM_OFFSET(0C00000))
+#define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(0C50000))
+#define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(0D00000))
+#define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(0D50000))
+#else
+/*
+ * 160M RAM (256M minimum minus 64MB heap + 32MB for u-boot, stack, fb, etc.
+ * 32M uncompressed kernel, 16M compressed kernel, 1M fdt,
+ * 1M script, 1M pxe and the ramdisk at the end.
+ */
+#define BOOTM_SIZE     __stringify(0xa000000)
+#define KERNEL_ADDR_R  __stringify(SDRAM_OFFSET(2000000))
+#define FDT_ADDR_R     __stringify(SDRAM_OFFSET(3000000))
+#define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(3100000))
+#define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(3200000))
+#define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(3300000))
 #endif
 #endif
 
