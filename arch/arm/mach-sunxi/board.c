@@ -302,10 +302,31 @@ unsigned long spl_mmc_get_uboot_raw_sector(struct mmc *mmc)
 	return sector;
 }
 
+#ifndef CONFIG_MACH_SUNIV
 u32 spl_boot_device(void)
 {
 	return sunxi_get_boot_device();
 }
+#else
+/*
+ * suniv BROM do not pass the boot media type to SPL, so we try with the
+ * boot sequence in BROM: mmc0->spinor->fail.
+ */
+void board_boot_order(u32 *spl_boot_list)
+{
+	/*
+	 * See the comments above in sunxi_get_boot_device() for infomation
+	 * about FEL boot.
+	 */
+	if (!is_boot0_magic(SPL_ADDR + 4)) {
+		spl_boot_list[0] = BOOT_DEVICE_BOARD;
+		return;
+	}
+
+	spl_boot_list[0] = BOOT_DEVICE_MMC1;
+	spl_boot_list[1] = BOOT_DEVICE_SPI;
+}
+#endif
 
 void board_init_f(ulong dummy)
 {
