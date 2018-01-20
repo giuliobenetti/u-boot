@@ -76,6 +76,19 @@
 			};
 		};
 
+		spi0: spi@1c05000 {
+			compatible = "allwinner,suniv-spi",
+				     "allwinner,sun8i-h3-spi";
+			reg = <0x01c05000 0x1000>;
+			interrupts = <10>;
+			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_BUS_SPI0>;
+			clock-names = "ahb", "mod";
+			resets = <&ccu RST_BUS_SPI0>;
+			status = "disabled";
+			#address-cells = <1>;
+			#size-cells = <0>;
+		};
+
 		ccu: clock@1c20000 {
 			compatible = "allwinner,suniv-f1c100s-ccu";
 			reg = <0x01c20000 0x400>;
@@ -102,6 +115,11 @@
 			interrupt-controller;
 			#interrupt-cells = <3>;
 			#gpio-cells = <3>;
+
+			spi0_pins_a: spi0-pins-pc {
+				pins = "PC0", "PC1", "PC2", "PC3";
+				function = "spi0";
+			};
 
 			uart0_pe_pins: uart-pins-pe {
 				pins = "PE0", "PE1";
