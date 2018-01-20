@@ -396,17 +396,19 @@ void board_nand_init(void)
 #ifdef CONFIG_MMC
 static void mmc_pinmux_setup(int sdc)
 {
-	unsigned int pin;
+	__maybe_unused unsigned int pin;
 	__maybe_unused int pins;
 
 	switch (sdc) {
 	case 0:
 		/* SDC0: PF0-PF5 */
+#ifndef CONFIG_UART0_PORT_F
 		for (pin = SUNXI_GPF(0); pin <= SUNXI_GPF(5); pin++) {
 			sunxi_gpio_set_cfgpin(pin, SUNXI_GPF_SDC0);
 			sunxi_gpio_set_pull(pin, SUNXI_GPIO_PULL_UP);
 			sunxi_gpio_set_drv(pin, 2);
 		}
+#endif
 		break;
 
 	case 1:
