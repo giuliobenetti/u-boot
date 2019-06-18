@@ -320,6 +320,11 @@ static const struct sunxi_gpio_soc_data soc_data_a_all = {
 	.no_banks = SUNXI_GPIO_BANKS,
 };
 
+static const struct sunxi_gpio_soc_data soc_data_a_6 = {
+	.start = 0,
+	.no_banks = 6,
+};
+
 static const struct sunxi_gpio_soc_data soc_data_l_1 = {
 	.start = 'L' - 'A',
 	.no_banks = 1,
@@ -363,6 +368,7 @@ static const struct udevice_id sunxi_gpio_ids[] = {
 	ID("allwinner,sun9i-a80-r-pinctrl",	l_3),
 	ID("allwinner,sun50i-a64-r-pinctrl",	l_1),
 	ID("allwinner,sun50i-h6-r-pinctrl",	l_2),
+	ID("allwinner,suniv-pinctrl",		a_6),
 	{ }
 };
 
