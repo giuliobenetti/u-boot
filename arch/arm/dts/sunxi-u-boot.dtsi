@@ -10,7 +10,9 @@
 
 / {
 	aliases {
+#if (CONFIG_MMC_SUNXI_SLOT_EXTRA > 1)
 		mmc1 = &mmc2;
+#endif
 	};
 
 	binman: binman {
