@@ -543,6 +543,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
 	sun7i-a20-pcduino3.dtb \
 	sun7i-a20-pcduino3-nano.dtb \
 	sun7i-a20-primo73.dtb \
+	sun7i-a20-s027_3.dtb \
 	sun7i-a20-wexler-tab7200.dtb \
 	sun7i-a20-wits-pro-a20-dkt.dtb \
 	sun7i-a20-yones-toptech-bd1078.dtb

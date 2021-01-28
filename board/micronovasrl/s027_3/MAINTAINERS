@@ -1,0 +1,5 @@
+MICRONOVA S.R.L. S027_3
+M:	Giulio Benetti <giulio.benetti@micronovasrl.com>
+S:	Maintained
+F:	board/micronovasrl/s027_3/
+F:	configs/micronovasrl_s027_3_defconfig
