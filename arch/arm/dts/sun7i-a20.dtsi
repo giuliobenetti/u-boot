@@ -943,6 +943,11 @@
 				function = "uart1";
 			};
 
+			uart2_pa_pins: uart2-pa-pins {
+				pins = "PA2", "PA3";
+				function = "uart2";
+			};
+
 			uart2_pi_pins: uart2-pi-pins {
 				pins = "PI18", "PI19";
 				function = "uart2";
