@@ -612,6 +612,7 @@ config SYS_CONFIG_NAME
 	default "sun50i" if MACH_SUN50I_H616
 
 config SYS_BOARD
+	string "Board name"
 	default "sunxi"
 
 config SYS_SOC
