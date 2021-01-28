@@ -615,6 +615,10 @@ config SYS_BOARD
 	string "Board name"
 	default "sunxi"
 
+config SYS_VENDOR
+	string "Vendor name"
+	default ""
+
 config SYS_SOC
 	default "sunxi"
 
