@@ -15,6 +15,7 @@
 	#size-cells = <1>;
 
 	aliases {
+		ethernet0 = &fec;
 		display0 = &lcdif;
 		gpio0 = &gpio1;
 		gpio1 = &gpio2;
@@ -177,6 +178,15 @@
 			ahb-burst-config = <0x0>;
 			tx-burst-size-dword = <0x10>;
 			rx-burst-size-dword = <0x10>;
+			status = "disabled";
+		};
+
+		fec: fec@402d8000 {
+			compatible = "fsl,imxrt-fec";
+			reg = <0x402d8000 0x4000>;
+			interrupts = <0 114 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&clks IMXRT1050_CLK_ENET>;
+			clock-names = "ipg";
 			status = "disabled";
 		};
 	};
