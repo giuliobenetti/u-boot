@@ -222,10 +222,12 @@
 				MXRT1050_IOMUXC_GPIO_B1_07_ENET_TX_DATA00	0x1b0b1
 				MXRT1050_IOMUXC_GPIO_B1_08_ENET_TX_DATA01	0x1b0b1
 				MXRT1050_IOMUXC_GPIO_B1_09_ENET_TX_EN		0x1b0b1
-				MXRT1050_IOMUXC_GPIO_B1_10_ENET_TX_CLK		0x1b0b1
+				MXRT1050_IOMUXC_GPIO_B1_10_ENET_REF_CLK		0x1b0b1
 				MXRT1050_IOMUXC_GPIO_B1_11_ENET_RX_ER		0x1b0b1
 				MXRT1050_IOMUXC_GPIO_EMC_40_ENET_MDC		0x1b0b1
 				MXRT1050_IOMUXC_GPIO_EMC_41_ENET_MDIO		0x1b0b1
+				MXRT1050_IOMUXC_GPIO_AD_B0_09_GPIO1_IO09	0x1b0b1
+				MXRT1050_IOMUXC_GPIO_AD_B0_10_GPIO1_IO10	0x1b0b1
 			>;
 		};
 	};
@@ -284,5 +286,20 @@
 &fec {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_enet>;
+	phy-mode = "rmii";
+	phy-reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+	phy-reset-duration = <1>;
+	phy-reset-post-delay = <1>;
+	phy-handle = <&ethphy0>;
 	status = "okay";
+
+	mdio {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ethphy0: ethernet-phy@0 {
+			compatible = "ethernet-phy-ieee802.3-c22";
+			reg = <2>;
+		};
+	};
 };
